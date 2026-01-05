@@ -1,10 +1,10 @@
 import path from 'path';
-import fs from 'fs';
+import type { CliRunner as CliRunnerType, SpawnOptions } from '../../src/CliRunner';
 
 // Import the bundled module using require to avoid top-level await
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bundleIndex = require(path.resolve(__dirname, '../../dist/index.js'));
-const { CliRunner } = bundleIndex as { CliRunner: any };
+const { CliRunner } = bundleIndex as { CliRunner: new (..._args: unknown[]) => CliRunnerType };
 
 describe('CliRunner Integration Test (Bundled)', () => {
   describe('exports', () => {
@@ -39,7 +39,7 @@ describe('CliRunner Integration Test (Bundled)', () => {
   });
 
   describe('basic process execution', () => {
-    let cli: any;
+    let cli: CliRunnerType | null;
 
     beforeEach(() => {
       cli = new CliRunner();
@@ -51,7 +51,9 @@ describe('CliRunner Integration Test (Bundled)', () => {
 
     it('should throw when starting without command', () => {
       expect(() => {
-        cli.start({} as any);
+        // empty options - typed as SpawnOptions to avoid `any`
+        // @ts-expect-error we intentionally omit required fields for this negative test
+        (cli as CliRunnerType).start({} as SpawnOptions);
       }).toThrow(/command/i);
     });
 
@@ -88,7 +90,7 @@ describe('CliRunner Integration Test (Bundled)', () => {
   });
 
   describe('JSON reading capability', () => {
-    let cli: any;
+    let cli: CliRunnerType | null;
 
     beforeEach(() => {
       cli = new CliRunner();
@@ -110,7 +112,7 @@ describe('CliRunner Integration Test (Bundled)', () => {
   });
 
   describe('line reading capability', () => {
-    let cli: any;
+    let cli: CliRunnerType | null;
 
     beforeEach(() => { cli = new CliRunner(); });
     afterEach(() => { if (cli) cli.dispose(); });
