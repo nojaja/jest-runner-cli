@@ -44,11 +44,12 @@ describe('JestRunnerCli Default Export Integration Test (Bundled)', () => {
       expect(typeof runModule.default).toBe('function');
     });
 
-    it('run function should have correct Jest runner signature', () => {
+    it('run function should have correct create-jest-runner signature (1 options param)', () => {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const runModule = require(path.resolve(__dirname, '../../dist/run.js'));
       const runFunc = runModule.default;
-      expect(runFunc.length).toBe(5);
+      // create-jest-runner expects run files to accept a single options object parameter
+      expect(runFunc.length).toBe(1);
     });
   });
 
