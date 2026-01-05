@@ -1,6 +1,6 @@
 {
   "name": "jest-runner-cli",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Jest custom runner for CLI workflows with a minimal CliRunner helper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,6 +22,8 @@
     "type-check": "tsc --noEmit",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "test:ci": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage",
+    "test:integration": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.integration.config.cjs",
+    "test:all": "npm run build && npm run test && npm run test:integration",
     "lint": "eslint . --ext .ts",
     "depcruise": "depcruise --config .dependency-cruiser.cjs src",
     "docs": "typedoc --options typedoc.json"

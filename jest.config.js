@@ -8,6 +8,6 @@ export default {
     '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   moduleFileExtensions: ['ts', 'js', 'json'],
-  testMatch: ['<rootDir>/test/unit/**/*.test.ts'],
+  testMatch: ['<rootDir>/tests/unit/**/*.test.ts'],
   verbose: true,
 };

@@ -1,6 +1,8 @@
 import type { Config } from '@jest/types';
 import type { JestEnvironment } from '@jest/environment';
 import type Runtime from 'jest-runtime';
+
+// jest-runner �� runTest �֐��𒼐ڎ擾
 import runTest from 'jest-runner/build/runTest.js';
 
 /**

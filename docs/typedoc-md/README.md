@@ -4,6 +4,10 @@
 
 # jest-runner-cli
 
+[![日本語ドキュメント](https://img.shields.io/badge/docs-日本語-blue.svg)](https://github.com/nojaja/jest-runner-cli/blob/main/README_ja.md)
+
+**[English](globals.md)** | **[日本語](_media/README_ja.md)**
+
 > A custom Jest runner with an imperative CLI process helper for testing CLI applications.
 
 **jest-runner-cli** is a lightweight, ESM-native Jest runner package that provides:
