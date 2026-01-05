@@ -8,7 +8,7 @@
 
 > **SpawnOptions** = `object`
 
-Defined in: [CliRunner.ts:7](https://github.com/nojaja/jest-runner-cli/blob/ae5a095a64d7f0086ef31ea3e7cb042fb99b9f28/src/CliRunner.ts#L7)
+Defined in: [CliRunner.ts:7](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L7)
 
 Options describing how to spawn the child CLI process.
 
@@ -18,7 +18,7 @@ Options describing how to spawn the child CLI process.
 
 > `optional` **args**: `string`[]
 
-Defined in: [CliRunner.ts:10](https://github.com/nojaja/jest-runner-cli/blob/ae5a095a64d7f0086ef31ea3e7cb042fb99b9f28/src/CliRunner.ts#L10)
+Defined in: [CliRunner.ts:10](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L10)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [CliRunner.ts:10](https://github.com/nojaja/jest-runner-cli/blob/ae5
 
 > `optional` **command**: `string`
 
-Defined in: [CliRunner.ts:9](https://github.com/nojaja/jest-runner-cli/blob/ae5a095a64d7f0086ef31ea3e7cb042fb99b9f28/src/CliRunner.ts#L9)
+Defined in: [CliRunner.ts:9](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L9)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [CliRunner.ts:9](https://github.com/nojaja/jest-runner-cli/blob/ae5a
 
 > `optional` **cwd**: `string`
 
-Defined in: [CliRunner.ts:11](https://github.com/nojaja/jest-runner-cli/blob/ae5a095a64d7f0086ef31ea3e7cb042fb99b9f28/src/CliRunner.ts#L11)
+Defined in: [CliRunner.ts:11](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L11)
 
 ***
 
@@ -42,4 +42,4 @@ Defined in: [CliRunner.ts:11](https://github.com/nojaja/jest-runner-cli/blob/ae5
 
 > `optional` **env**: `NodeJS.ProcessEnv`
 
-Defined in: [CliRunner.ts:12](https://github.com/nojaja/jest-runner-cli/blob/ae5a095a64d7f0086ef31ea3e7cb042fb99b9f28/src/CliRunner.ts#L12)
+Defined in: [CliRunner.ts:12](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L12)

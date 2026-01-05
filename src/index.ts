@@ -1,13 +1,19 @@
-import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import { CliRunner } from './CliRunner.js';
 
 export { CliRunner };
 export type { SpawnOptions } from './CliRunner.js';
 
-const require = createRequire(import.meta.url);
-const { createJestRunner } = require('create-jest-runner');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const runPath = new URL('./run.js', import.meta.url).pathname;
+// Dynamically import create-jest-runner to handle ESM/CommonJS interop
+const createJestRunnerModule = await import('create-jest-runner');
+const createJestRunner = (createJestRunnerModule as any).createJestRunner;
+
+// Use absolute file path to the run.js module
+const runPath = join(__dirname, 'run.js');
 
 const JestRunnerCli = createJestRunner(runPath);
 

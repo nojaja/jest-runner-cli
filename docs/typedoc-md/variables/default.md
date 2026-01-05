@@ -8,4 +8,4 @@
 
 > `const` **default**: `any`
 
-Defined in: [index.ts:12](https://github.com/nojaja/jest-runner-cli/blob/ae5a095a64d7f0086ef31ea3e7cb042fb99b9f28/src/index.ts#L12)
+Defined in: [index.ts:18](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/index.ts#L18)
