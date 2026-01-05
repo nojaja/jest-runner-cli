@@ -1,5 +1,7 @@
 # jest-runner-cli
 
+**[English](./README.md)** | **[日本語](./README_ja.md)**
+
 > CLI アプリケーションをテストするためのカスタム Jest ランナーと命令型プロセスヘルパー
 
 **jest-runner-cli** は、軽量でESM対応のJestランナーパッケージです。以下の機能を提供します：

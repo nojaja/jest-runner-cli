@@ -1,6 +1,6 @@
 {
   "name": "jest-runner-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Jest custom runner for CLI workflows with a minimal CliRunner helper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,11 @@
     "./CliRunner": "./dist/CliRunner.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "package.json",
+    "README.md",
+    "README_ja.md",
+    "LICENSE"
   ],
   "type": "module",
   "scripts": {
@@ -22,7 +26,16 @@
     "depcruise": "depcruise --config .dependency-cruiser.cjs src",
     "docs": "typedoc --options typedoc.json"
   },
-  "keywords": ["cli","runner","test","jest"],
+  "keywords": ["cli", "runner", "test", "jest"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nojaja/jest-runner-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nojaja/jest-runner-cli/issues"
+  },
+  "homepage": "https://github.com/nojaja/jest-runner-cli#readme",
+  "author": "nojaja <free.riccia@gmail.com> (https://github.com/nojaja)",
   "license": "MIT",
   "peerDependencies": {
     "jest": "^29.6.1"
