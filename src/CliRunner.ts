@@ -290,7 +290,7 @@ export class CliRunner extends EventEmitter {
    * 処理概要: 引数を与えると一度にバッファを返す。引数を与えない場合は補助オブジェクトを返す。
    * @returns `Promise<string>` または `toLines/toJson/clear` を持つヘルパオブジェクト
    */
-  /* eslint-disable-next-line no-unused-vars */
+  /* eslint-disable no-unused-vars */
   /**
    *
    */
@@ -337,6 +337,7 @@ export class CliRunner extends EventEmitter {
       },
     };
   }
+  /* eslint-enable no-unused-vars */
 
   /**
    * 処理名: stderr 取得

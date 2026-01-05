@@ -1,29 +1,44 @@
-# jest-runner-cli-clirunner
+# jest-runner-cli
 
-Small library extracted from a sample project that exposes `CliRunner`,
-a helper to spawn and interact with CLI child processes from tests.
+Custom Jest runner for CLI-oriented workflows. It follows the typical `jest-runner-*` layout and ships with a minimal `CliRunner` helper for ad-hoc child process interactions.
 
-## Usage
-
-Install (dev):
+## Install
 
 ```bash
-npm install --save-dev ./  # when developing locally
+npm install --save-dev jest-runner-cli
 ```
 
-Basic example:
+## Jest config example
+
+```js
+// jest.config.js (ESM)
+export default {
+	runner: 'jest-runner-cli',
+	testMatch: ['<rootDir>/test/unit/**/*.test.ts']
+};
+```
+
+## API surface
+
+- Default export: Jest runner created via `createJestRunner`.
+- Named export: `CliRunner` helper for tests that need imperative CLI process control.
+
+### CliRunner quick start
 
 ```ts
-import CliRunner from 'jest-runner-cli-clirunner';
+import { CliRunner } from 'jest-runner-cli';
 
-const r = new CliRunner();
-// r.start({ command: 'node', args: ['./bin/my-cli.js'] });
+const runner = new CliRunner();
+runner.start({ command: 'node', args: ['./bin/my-cli.js'] });
+await runner.readStdout().toLines();
+await runner.sendCtrlC();
 ```
 
-Run tests:
+## Scripts
 
-```bash
-npm install ; npm test
-```
-# jest-runner-cli
-Run your CLI application tests using Jest.
+- `npm run build` — `tsc -p tsconfig.build.json`
+- `npm test` — runs Jest in ESM mode
+
+## Notes
+
+- No webpack bundle is produced; the package ships the compiled `dist/` output from TypeScript.

@@ -1,33 +1,48 @@
 {
-  "name": "jest-runner-cli-clirunner",
-  "version": "0.1.0",
-  "description": "Small library that provides a test-friendly CLI process runner (extracted from sample project)",
+  "name": "jest-runner-cli",
+  "version": "0.2.0",
+  "description": "Jest custom runner for CLI workflows with a minimal CliRunner helper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "commonjs",
-  "scripts": {
-    "build": "tsc --build",
-    "test": "jest",
-    "test:ci": "jest --coverage",
-    "lint": "eslint . --ext .ts",
-    "depcruise": "depcruise --config .dependency-cruiser.js src",
-    "docs": "typedoc --options typedoc.json",
-    "type-check": "tsc --noEmit"
+  "exports": {
+    ".": "./dist/index.js",
+    "./run": "./dist/run.js",
+    "./CliRunner": "./dist/CliRunner.js"
   },
-  "keywords": ["cli","runner","test","child_process"],
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "type-check": "tsc --noEmit",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test:ci": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage",
+    "lint": "eslint . --ext .ts",
+    "depcruise": "depcruise --config .dependency-cruiser.cjs src",
+    "docs": "typedoc --options typedoc.json"
+  },
+  "keywords": ["cli","runner","test","jest"],
   "license": "MIT",
+  "peerDependencies": {
+    "jest": "^29.6.1"
+  },
   "devDependencies": {
-    "typescript": "5.3.3",
-    "ts-jest": "^29.1.0",
-    "jest": "^29.6.1",
     "@types/jest": "^29.5.2",
-    "eslint": "^8.45.0",
-    "@typescript-eslint/parser": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "eslint-plugin-sonarjs": "^0.19.0",
-    "eslint-plugin-jsdoc": "^46.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "dependency-cruiser": "^17.3.5",
+    "eslint": "^8.45.0",
+    "eslint-plugin-jsdoc": "^46.0.0",
+    "eslint-plugin-sonarjs": "^0.19.0",
+    "jest": "^29.6.1",
+    "ts-jest": "^29.1.0",
     "typedoc": "^0.28.0",
-    "typedoc-plugin-markdown": "^4.8.0"
+    "typedoc-plugin-markdown": "^4.8.0",
+    "typescript": "5.3.3"
+  },
+  "dependencies": {
+    "create-jest-runner": "^1.0.0",
+    "jest-runner": "^29.6.1"
   }
 }
