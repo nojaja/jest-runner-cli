@@ -19,17 +19,25 @@ export default async function run(
   runtime: Runtime,
   testPath: string
 ): Promise<unknown> {
-  // Dynamically load jest-runner's runTest function
-  // This allows for ESM/CommonJS interop and avoids bundling issues
+  // Try to use public exports from 'jest-runner' first. Some jest versions
+  // no longer expose internal build paths (eg. './build/runTest.js'), so
+  // prefer the published API surface and fall back to known alternatives.
   try {
-    const runTestModule = await import('jest-runner/build/runTest.js');
-    const runTest = runTestModule.default;
+    const mod = await import('jest-runner');
+    // runTest may be a named export, default export, or the module itself.
+    // Be permissive to support multiple packaging styles.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const anyMod: any = mod;
+    const runTest = anyMod.runTest ?? anyMod.default ?? anyMod;
     return await runTest(testPath, globalConfig, projectConfig, environment, runtime);
   } catch (error) {
-    // If jest-runner is not available, try jest-circus (the default test runner)
+    // If jest-runner cannot be imported or doesn't expose the runner, try
+    // jest-circus's runner as a fallback (common default test runner).
     try {
-      const runTestModule = await import('jest-circus/runner.js');
-      const runTest = runTestModule.default;
+      const mod = await import('jest-circus/runner');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const anyMod: any = mod;
+      const runTest = anyMod.runTest ?? anyMod.default ?? anyMod;
       return await runTest(testPath, globalConfig, projectConfig, environment, runtime);
     } catch (_) {
       throw error;
