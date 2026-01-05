@@ -1,0 +1,156 @@
+name: Auto Release on Version Change
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'package.json'
+
+permissions:
+  contents: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version_changed: ${{ steps.check.outputs.changed }}
+      new_version: ${{ steps.check.outputs.version }}
+      tag_exists: ${{ steps.check.outputs.tag_exists }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get current version
+        id: current
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "現在のバージョン: $VERSION"
+
+      - name: Get previous version
+        id: previous
+        run: |
+          git checkout HEAD~1 -- package.json 2>/dev/null || echo "初回コミットの可能性があります"
+          if [ -f package.json ]; then
+            PREV_VERSION=$(node -p "require('./package.json').version")
+            echo "version=$PREV_VERSION" >> $GITHUB_OUTPUT
+            echo "前回のバージョン: $PREV_VERSION"
+          else
+            echo "version=0.0.0" >> $GITHUB_OUTPUT
+            echo "前回のバージョンが見つかりません"
+          fi
+          git checkout HEAD -- package.json
+
+      - name: Check if version changed
+        id: check
+        run: |
+          CURRENT_VERSION="${{ steps.current.outputs.version }}"
+          PREVIOUS_VERSION="${{ steps.previous.outputs.version }}"
+          
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "version=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            echo "✅ バージョンが変更されました: $PREVIOUS_VERSION → $CURRENT_VERSION"
+            
+            # タグが既に存在するか確認
+            if git rev-parse "v$CURRENT_VERSION" >/dev/null 2>&1; then
+              echo "tag_exists=true" >> $GITHUB_OUTPUT
+              echo "⚠️ タグ v$CURRENT_VERSION は既に存在します"
+            else
+              echo "tag_exists=false" >> $GITHUB_OUTPUT
+              echo "✨ 新しいタグ v$CURRENT_VERSION を作成します"
+            fi
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "version=v$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ バージョンに変更はありません"
+          fi
+
+  create-release:
+    needs: check-version
+    if: needs.check-version.outputs.version_changed == 'true' && needs.check-version.outputs.tag_exists == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract changelog for current version
+        id: changelog
+        run: |
+          VERSION="${{ needs.check-version.outputs.new_version }}"
+          VERSION_NO_V="${VERSION#v}"
+          
+          # CHANGELOG.mdから該当バージョンのセクションを抽出
+          if [ -f CHANGELOG.md ]; then
+            # バージョンセクションの開始行を見つける
+            START_LINE=$(grep -n "## \[$VERSION_NO_V\]" CHANGELOG.md | head -1 | cut -d: -f1)
+            
+            if [ -n "$START_LINE" ]; then
+              # 次のバージョンセクションの開始行を見つける（終了位置）
+              NEXT_LINE=$(tail -n +$((START_LINE + 1)) CHANGELOG.md | grep -n "## \[" | head -1 | cut -d: -f1)
+              
+              if [ -n "$NEXT_LINE" ]; then
+                END_LINE=$((START_LINE + NEXT_LINE - 1))
+                CONTENT=$(sed -n "${START_LINE},${END_LINE}p" CHANGELOG.md | tail -n +2)
+              else
+                CONTENT=$(tail -n +$((START_LINE + 1)) CHANGELOG.md)
+              fi
+              
+              # 複数行のコンテンツを適切にエスケープ
+              {
+                echo 'content<<EOF'
+                echo "$CONTENT"
+                echo 'EOF'
+              } >> $GITHUB_OUTPUT
+              
+              echo "📝 CHANGELOGから内容を抽出しました"
+            else
+              echo "content=バージョン $VERSION_NO_V の変更内容" >> $GITHUB_OUTPUT
+              echo "⚠️ CHANGELOGにバージョン情報が見つかりません"
+            fi
+          else
+            echo "content=バージョン $VERSION_NO_V のリリース" >> $GITHUB_OUTPUT
+            echo "ℹ️ CHANGELOG.mdが見つかりません"
+          fi
+
+      - name: Create Git Tag
+        run: |
+          VERSION="${{ needs.check-version.outputs.new_version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$VERSION" -m "Release $VERSION"
+          git push origin "$VERSION"
+          echo "✅ タグ $VERSION を作成しました"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.check-version.outputs.new_version }}
+          release_name: Release ${{ needs.check-version.outputs.new_version }}
+          body: |
+            ## 🚀 Release ${{ needs.check-version.outputs.new_version }}
+            
+            ${{ steps.changelog.outputs.content }}
+            
+            ### インストール
+            ```bash
+            npm install jest-runner-cli@${{ needs.check-version.outputs.new_version }}
+            ```
+          draft: false
+          prerelease: false
+
+      - name: Summary
+        run: |
+          VERSION="${{ needs.check-version.outputs.new_version }}"
+          echo "## 🎉 リリース完了" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **バージョン**: $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "- **タグ**: [タグを見る](https://github.com/${{ github.repository }}/releases/tag/$VERSION)" >> $GITHUB_STEP_SUMMARY
+          echo "- **リリース**: [リリースを見る](https://github.com/${{ github.repository }}/releases/tag/$VERSION)" >> $GITHUB_STEP_SUMMARY
