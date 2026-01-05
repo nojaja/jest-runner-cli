@@ -10,6 +10,7 @@ const __dirname = dirname(__filename);
 
 // Dynamically import create-jest-runner to handle ESM/CommonJS interop
 const createJestRunnerModule = await import('create-jest-runner');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createJestRunner = (createJestRunnerModule as any).createJestRunner;
 
 // Use absolute file path to the run.js module

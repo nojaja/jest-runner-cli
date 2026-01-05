@@ -6,7 +6,7 @@
 
 # Class: CliRunner
 
-Defined in: [CliRunner.ts:22](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L22)
+Defined in: [CliRunner.ts:22](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L22)
 
 CliRunner
 
@@ -24,7 +24,7 @@ sample project and adapted to be a reusable library class.
 
 > **new CliRunner**(): `CliRunner`
 
-Defined in: [CliRunner.ts:37](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L37)
+Defined in: [CliRunner.ts:37](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L37)
 
 処理名: CliRunner 初期化
 
@@ -46,7 +46,7 @@ Defined in: [CliRunner.ts:37](https://github.com/nojaja/jest-runner-cli/blob/095
 
 > **dispose**(): `void`
 
-Defined in: [CliRunner.ts:416](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L416)
+Defined in: [CliRunner.ts:416](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L416)
 
 処理名: リソース解放
 
@@ -62,7 +62,7 @@ Defined in: [CliRunner.ts:416](https://github.com/nojaja/jest-runner-cli/blob/09
 
 > **readStderr**(): `string`
 
-Defined in: [CliRunner.ts:348](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L348)
+Defined in: [CliRunner.ts:348](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L348)
 
 処理名: stderr 取得
 
@@ -86,7 +86,7 @@ stderr バッファ文字列
 
 > **readStdout**(): `object`
 
-Defined in: [CliRunner.ts:297](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L297)
+Defined in: [CliRunner.ts:297](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L297)
 
 ##### Returns
 
@@ -132,7 +132,7 @@ Defined in: [CliRunner.ts:297](https://github.com/nojaja/jest-runner-cli/blob/09
 
 > **readStdout**(`_timeout`): `Promise`\<`string`\>
 
-Defined in: [CliRunner.ts:303](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L303)
+Defined in: [CliRunner.ts:303](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L303)
 
 処理名: stdout 一括取得（タイムアウト付き）
 
@@ -154,7 +154,7 @@ stdout 全体を表す Promise<string>
 
 > **sendCtrlC**(`timeout?`): `Promise`\<`void`\>
 
-Defined in: [CliRunner.ts:359](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L359)
+Defined in: [CliRunner.ts:359](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L359)
 
 処理名: SIGINT 送信と終了待ち
 
@@ -180,7 +180,7 @@ Promise<void>
 
 > **start**(`options`, `exitWaitTimeout?`): `CliRunner`
 
-Defined in: [CliRunner.ts:53](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L53)
+Defined in: [CliRunner.ts:53](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L53)
 
 処理名: 子プロセス起動
 
@@ -214,7 +214,7 @@ this インスタンス
 
 > **write**(`data`): `void`
 
-Defined in: [CliRunner.ts:144](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L144)
+Defined in: [CliRunner.ts:144](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L144)
 
 処理名: stdin 書き込み
 
@@ -238,7 +238,7 @@ Defined in: [CliRunner.ts:144](https://github.com/nojaja/jest-runner-cli/blob/09
 
 > **writeln**(`data`): `void`
 
-Defined in: [CliRunner.ts:155](https://github.com/nojaja/jest-runner-cli/blob/095d0f0ab1bd052e98bb848e0b606d76f01b8059/src/CliRunner.ts#L155)
+Defined in: [CliRunner.ts:155](https://github.com/nojaja/jest-runner-cli/blob/da63ab89882741bbf9020acb6222e34295e92d76/src/CliRunner.ts#L155)
 
 処理名: stdin 書き込み（改行付き）
 
