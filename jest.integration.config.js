@@ -9,10 +9,12 @@
 module.exports = {
   // Target bundled JavaScript, not TypeScript source
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/tests/integration/**/*.test.mjs'],
+  testMatch: ['<rootDir>/tests/integration/**/*.test.ts'],
   
-  // No transformation needed for bundled JS
-  transform: {},
+  // Transform TypeScript integration tests with ts-jest
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.json', useESM: false }]
+  },
   
   // Verbose output for integration test debugging
   verbose: true,

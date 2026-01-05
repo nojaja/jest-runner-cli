@@ -1,6 +1,6 @@
 {
   "name": "jest-runner-cli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Jest custom runner for CLI workflows with a minimal CliRunner helper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,16 +16,16 @@
     "README_ja.md",
     "LICENSE"
   ],
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && webpack --config webpack.config.js --mode production",
     "type-check": "tsc --noEmit",
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "test:ci": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --coverage",
-    "test:integration": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.integration.config.cjs",
+    "test": "jest --config jest.unit.config.js",
+    "test:ci": "jest --config jest.unit.config.js --coverage",
+    "test:integration": "jest --config jest.integration.config.js",
     "test:all": "npm run build && npm run test && npm run test:integration",
     "lint": "eslint . --ext .ts",
-    "depcruise": "depcruise --config .dependency-cruiser.cjs src",
+    "depcruise": "depcruise --config .dependency-cruiser.js src",
     "docs": "typedoc --options typedoc.json"
   },
   "keywords": ["cli", "runner", "test", "jest"],
@@ -54,7 +54,10 @@
     "ts-jest": "^29.1.0",
     "typedoc": "^0.28.0",
     "typedoc-plugin-markdown": "^4.8.0",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "webpack": "^5.99.8",
+    "webpack-cli": "^5.0.1",
+    "ts-loader": "^9.4.2"
   },
   "dependencies": {
     "create-jest-runner": "^1.0.0",
