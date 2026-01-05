@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs/typedoc-md",
+  "plugin": ["typedoc-plugin-markdown"],
+  "exclude": ["**/test/**", "**/node_modules/**"],
+  "excludePrivate": true,
+  "hideGenerator": true
+}
