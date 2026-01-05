@@ -4,6 +4,7 @@ import type { CliRunner as CliRunnerType, SpawnOptions } from '../../src/CliRunn
 // Import the bundled module using require to avoid top-level await
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bundleIndex = require(path.resolve(__dirname, '../../dist/index.js'));
+// eslint-disable-next-line no-unused-vars
 const { CliRunner } = bundleIndex as { CliRunner: new (..._args: unknown[]) => CliRunnerType };
 
 describe('CliRunner Integration Test (Bundled)', () => {

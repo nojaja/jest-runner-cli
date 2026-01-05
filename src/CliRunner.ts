@@ -292,12 +292,12 @@ export class CliRunner extends EventEmitter {
    */
   /* eslint-disable no-unused-vars */
   /**
-   *
+   * No-arg overload: returns helper object
    */
   readStdout(): { toJson: (_timeout?: number) => Promise<unknown>; toLines: (_timeout?: number) => Promise<string[]>; clear: () => void };
   /**
    * 処理名: stdout 一括取得（タイムアウト付き）
-   * @param timeout - タイムアウト（ms）
+   * @param _timeout - タイムアウト（ms）
    * @returns stdout 全体を表す Promise<string>
    */
   readStdout(_timeout: number): Promise<string>;
