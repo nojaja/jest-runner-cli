@@ -4,7 +4,7 @@
 
 > CLI アプリケーションをテストするためのカスタム Jest ランナーと命令型プロセスヘルパー
 
-**jest-runner-cli** は、軽量でESM対応のJestランナーパッケージです。以下の機能を提供します：
+**jest-runner-cli** は、Jest 29.6.1+ 対応の軽量 Jest ランナーパッケージです。以下の機能を提供します：
 
 - `create-jest-runner` で構築したカスタム Jest ランナーのシームレスな統合
 - テストから子プロセスを直接制御できる `CliRunner` ヘルパークラス
@@ -14,12 +14,12 @@ CLI ツール、スクリプト、コマンドラインアプリケーション�
 
 ## 主な機能
 
-✅ **カスタム Jest ランナー** — テスト実行用のカスタムランナーとして使用可能  
+✅ **カスタム Jest ランナー** — `create-jest-runner` で構築したカスタムランナーとして使用可能  
 ✅ **CliRunner ヘルパー** — 子プロセスのスポーン・制御が簡単な命令型API  
 ✅ **柔軟な出力読み取り** — stdout を行単位・テキスト・JSON として読み取り可能  
 ✅ **自動終了保護** — ハングしたプロセスを自動検知・終了  
 ✅ **クロスプラットフォーム** — Windows、macOS、Linux で動作  
-✅ **ESM ネイティブ** — モダンな ESM モジュールサポート  
+✅ **Jest 29+ 対応** — Jest 29.6.1～29.7.0+ で完全動作確認済み  
 ✅ **TypeScript 対応** — 完全な型定義を付属  
 
 ⚠️ **制限事項** — 高度なリトライ戦略やカスタムシグナル処理は未実装
@@ -272,19 +272,28 @@ npm run test:ci
 ## 技術的詳細
 
 - **ランタイム：** Node.js 18+、TypeScript 5.3+
-- **モジュール形式：** ESM（ECMAScript Modules）
-- **Jest バージョン：** 29.6.1+
-- **ビルド：** TypeScript を `dist/` フォルダにコンパイル
-- **バンドラなし：** webpack 等を使わない生の JavaScript 出力
+- **Jest バージョン：** 29.6.1+ (29.7.0+ を含む全バージョンで完全動作確認済み)
+- **モジュール形式：** CommonJS (package.json exportsを介したESM互換)
+- **ビルド：** TypeScript を `dist/` フォルダにコンパイル、webpack バンドリング
 
 ### 実装に関する注
 
-- Jest ランナーは `create-jest-runner` を使用して構築され、Jest のコア `runTest` 関数に委譲します
-- TypeScript は個別の設定でコンパイルされます：
-  - `tsconfig.json` — 開発用（エミットなし）
-  - `tsconfig.build.json` — ビルド用（`dist/` にエミット）
-- `CliRunner` は Node.js の `child_process.spawn()` をベースに、イベント駆動の stdout/stderr 処理で実装されています
-- 自動終了タイムアウトは `setTimeout` を使用してハングしたプロセスを検知し、`SIGINT` から `SIGKILL` へエスカレートします
+- **Jest ランナーアーキテクチャ：** このパッケージは `create-jest-runner` をベースに構築した Jest カスタムランナーをエクスポートしています。`run.ts` ファイルは `create-jest-runner` の実行ファイル API（`{ testPath, globalConfig, config, ... }` 署名）を実装し、テスト実行を `jest-circus/runner` に委譲します。Jest 29+ のコア標準テストランナーです。
+
+- **jest-circus 統合：** Jest 29.6.1+ から、基盤となるテスト実行エンジンとして `jest-circus/runner` を使用しています。これにより `jest-runner` の非公開エクスポートパスへの直接参照を回避でき、Node のパッケージ `exports` 制限への準拠が確実になります。
+
+- **TypeScript コンパイル：** TypeScript は個別の設定でコンパイルされます：
+  - `tsconfig.json` — 開発用（エミットなし、厳密モード有効）
+  - `tsconfig.build.json` — ビルド用（`dist/` にエミット、型定義を含む）
+  - Webpack バンドリングは最終出力を CommonJS として生成します
+
+- **CliRunner 実装：** Node.js `child_process.spawn()` をベースに、イベント駆動の stdout/stderr バッファリングで実装されています。自動終了タイムアウトは `setTimeout` を使用してハングしたプロセスを検知し、`SIGINT` から `SIGKILL` へエスカレートします。
+
+### Jest 29+ との互換性
+
+バージョン 0.2.6+ 以降、jest-runner-cli は Jest 29.6.1 とそれ以降のバージョン（Jest 29.7.0+ を含む）と完全に互換性があります。実装は `jest-runner` の非公開 API を直接参照するのではなく、`jest-circus/runner` を通じた公開インターフェース的なテストランナーを使用しており、Node の厳密な `exports` 制約への準拠が確実です。
+
+**課題修正（v0.2.6+）：** 以前のバージョンでは `jest-runner/build/runTest.js` を参照していたため、Jest 29+ では Node のパッケージエクスポート制限により `ERR_PACKAGE_PATH_NOT_EXPORTED` エラーが発生していました。これは `jest-circus/runner` による公開テストランナーインターフェースへの委譲により解決されました。
 
 ## トラブルシューティング
 
@@ -325,10 +334,19 @@ await runner.sendCtrlC(5000);
 
 ## 変更履歴
 
-### v0.2.0（現在）
+### v0.2.6–0.2.7（最新）
 
-- ✅ `type: module` を使用した ESM への再構築
-- ✅ `create-jest-runner` を使用した Jest ランナー機能の統合
+- ✅ **修正：** Jest 29.6.1+ での `ERR_PACKAGE_PATH_NOT_EXPORTED` エラーを解決
+  - `jest-runner` の直接 API から `jest-circus/runner` を経由したテスト実行に変更
+  - run.ts を `create-jest-runner` 実行ファイル API（`{ testPath, globalConfig, config }` 署名）に対応更新
+  - Node の厳密なパッケージ `exports` 制約への準拠を確保
+- ✅ 新しい実行関数署名にてインテグレーションテストを更新
+- ✅ Jest 29+ 互換性を実証する repro テストを追加
+
+### v0.2.0
+
+- ✅ CommonJS モジュール形式への再構築
+- ✅ `create-jest-runner` を使用した Jest カスタムランナー機能の統合
 - ✅ 包括的な TypeScript 型定義の追加
 - ✅ ハングしたプロセス検知のための自動終了タイムアウト機能を追加
 - ✅ async/await パターンでのテストスイートの更新
